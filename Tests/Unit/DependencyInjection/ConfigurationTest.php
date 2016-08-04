@@ -5,9 +5,6 @@ use ElevenLabs\ApiServiceBundle\DependencyInjection\Configuration;
 use ElevenLabs\ApiServiceBundle\DependencyInjection\ApiServiceExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionConfigurationTestCase;
 
-/**
- * @author David Buchmann <mail@davidbu.ch>
- */
 class ConfigurationTest extends AbstractExtensionConfigurationTestCase
 {
     private $emptyConfig = [

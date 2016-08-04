@@ -13,9 +13,6 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  *
  * This information is solely responsible for how the different configuration
  * sections are normalized, and merged.
- *
- * @author David Buchmann <mail@davidbu.ch>
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
 class Configuration implements ConfigurationInterface
 {
@@ -49,7 +46,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('cache_dir')->info('Cache directory for schema')->defaultValue('%kernel.cache_dir%/api_service')->end()
                 ->arrayNode('default')
                     ->addDefaultsIfNotSet()
-                    ->info('Configure which services to use when generation API service classes')
+                    ->info('Configure which services to use when generating API service classes')
                     ->children()
                         ->scalarNode('client')->defaultValue('httplug.client')->end()
                         ->scalarNode('message_factory')->defaultValue('httplug.message_factory')->end()
