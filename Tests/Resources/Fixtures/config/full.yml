@@ -1,0 +1,13 @@
+api_service:
+  cache_dir: /path/to/cache/dir
+  default:
+    client: custom_client
+    message_factory: custom_message_factory
+    uri_factory: custom_uri_factory
+  apis:
+    foo:
+      baseUrl: https://foo.com
+      schema: /path/to/foo.yml
+    bar:
+      baseUrl: https://bar.com
+      schema: /path/to/bar.json

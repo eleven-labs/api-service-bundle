@@ -1,0 +1,12 @@
+framework:
+  secret: php-http
+  test: ~
+
+# Use auto discovery
+httplug: ~
+
+api_service:
+  apis:
+    foo:
+      baseUrl: http://foo.com
+      schema: '%kernel.root_dir%/config/schema/foo.yml'
