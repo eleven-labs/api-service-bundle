@@ -60,6 +60,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('baseUrl')->info('The url of your service (ex: http://domain.tld)')->isRequired()->end()
                         ->scalarNode('schema')->info('absolute path to the OpenAPI/Swagger2.0 schema')->isRequired()->end()
+                        ->scalarNode('client')->info('use a specific http client for an api service')->end()
                     ->end()
                 ->end()
             ->end();

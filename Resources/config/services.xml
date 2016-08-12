@@ -13,7 +13,6 @@
         <service id="api_service.factory.service" class="ElevenLabs\ApiServiceBundle\Factory\ServiceFactory">
             <argument type="service" id="api_service.uri_factory" />
             <argument type="service" id="api_service.uri_template" />
-            <argument type="service" id="api_service.client" />
             <argument type="service" id="api_service.message_factory" />
             <argument type="service" id="api_service.cache_factory" />
         </service>

@@ -17,7 +17,7 @@ class ServiceFactoryTest extends TestCase
 {
     public function setUp()
     {
-        vfsStream::setup('cache', 0600, ['schema.json.cache' => '<?php return new stdClass;']);
+        vfsStream::setup('cache', 0600, ['schema.json.cache' => '']);
     }
 
     /** @test */
@@ -28,7 +28,6 @@ class ServiceFactoryTest extends TestCase
 
         $uriFactory = $this->prophesize(UriFactory::class);
         $uriTemplate = $this->prophesize(UriTemplate::class);
-        $httpClient = $this->prophesize(HttpClient::class);
         $messageFactory = $this->prophesize(MessageFactory::class);
         $configCache = $this->prophesize(ConfigCacheInterface::class);
         $configCacheFactory = $this->prophesize(ConfigCacheFactory::class);
@@ -43,12 +42,12 @@ class ServiceFactoryTest extends TestCase
         $factory = new ServiceFactory(
             $uriFactory->reveal(),
             $uriTemplate->reveal(),
-            $httpClient->reveal(),
             $messageFactory->reveal(),
             $configCacheFactory->reveal()
         );
 
-        $service = $factory->getService($aBaseUrl, $aSchemaFile);
+        $httpClient = $this->prophesize(HttpClient::class);
+        $service = $factory->getService($httpClient->reveal(), $aBaseUrl, $aSchemaFile);
 
         self::assertInstanceOf(ApiService::class, $service);
     }
