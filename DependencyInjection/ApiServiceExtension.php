@@ -1,6 +1,7 @@
 <?php
 namespace ElevenLabs\ApiServiceBundle\DependencyInjection;
 
+use ElevenLabs\Api\Service\ApiService;
 use ElevenLabs\ApiServiceBundle\Factory\DummyService;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -42,9 +43,15 @@ class ApiServiceExtension extends Extension
 
         foreach ($apiServices as $name => $arguments) {
             $serviceId = 'api_service.api.'.$name;
-            $container
-                ->register($serviceId, DummyService::class)
+
+            $httpClientServiceId = (isset($arguments['client']))
+                ? $arguments['client']
+                : 'api_service.client';
+
+            $apiServiceFactory = $container
+                ->register($serviceId, ApiService::class)
                 ->setFactory([$serviceFactory, 'getService'])
+                ->addArgument(new Reference($httpClientServiceId))
                 ->addArgument($arguments['baseUrl'])
                 ->addArgument($arguments['schema']);
         }

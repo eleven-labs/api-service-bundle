@@ -21,9 +21,6 @@ class ServiceFactory
     /** @var UriTemplate */
     private $uriTemplate;
 
-    /** @var HttpClient */
-    private $httpClient;
-
     /** @var MessageFactory */
     private $messageFactory;
 
@@ -34,31 +31,29 @@ class ServiceFactory
      * ServiceFactory constructor.
      * @param UriFactory $uriFactory
      * @param UriTemplate $uriTemplate
-     * @param HttpClient $httpClient
      * @param MessageFactory $messageFactory
      * @param ConfigCacheFactory $cacheFactory
      */
     public function __construct(
         UriFactory $uriFactory,
         UriTemplate $uriTemplate,
-        HttpClient $httpClient,
         MessageFactory $messageFactory,
         ConfigCacheFactory $cacheFactory
     ) {
         $this->uriFactory = $uriFactory;
         $this->uriTemplate = $uriTemplate;
-        $this->httpClient = $httpClient;
         $this->messageFactory = $messageFactory;
         $this->cacheFactory = $cacheFactory;
     }
 
     /**
+     * @param HttpClient $httpClient
      * @param string $baseUrl
      * @param string $schemaFile
      *
      * @return ApiService
      */
-    public function getService($baseUrl, $schemaFile)
+    public function getService(HttpClient $httpClient, $baseUrl, $schemaFile)
     {
         $cache = $this->cacheFactory->getConfigCacheFrom($schemaFile);
         $schema = (new SchemaLoader($cache))->load($schemaFile);
@@ -66,7 +61,7 @@ class ServiceFactory
         return new ApiService(
             $this->uriFactory->createUri($baseUrl),
             $this->uriTemplate,
-            $this->httpClient,
+            $httpClient,
             $this->messageFactory,
             $schema,
             new RequestValidator($schema, new Validator())

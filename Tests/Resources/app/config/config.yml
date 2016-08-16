@@ -3,10 +3,18 @@ framework:
   test: ~
 
 # Use auto discovery
-httplug: ~
+httplug:
+  clients:
+    foo:
+      factory: 'httplug.factory.guzzle6'
 
 api_service:
   apis:
-    foo:
+    with_client:
       baseUrl: http://foo.com
       schema: '%kernel.root_dir%/config/schema/foo.yml'
+      client: httplug.client.foo
+    with_default_client:
+      baseUrl: http://bar.com
+      schema: '%kernel.root_dir%/config/schema/foo.yml'
+
