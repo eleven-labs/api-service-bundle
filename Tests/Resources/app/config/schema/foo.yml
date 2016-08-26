@@ -42,6 +42,6 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/Foo"
-    responses:
-      201:
-        description: Foo created
+      responses:
+        201:
+          description: Foo created

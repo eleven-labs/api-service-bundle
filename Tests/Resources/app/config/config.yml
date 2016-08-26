@@ -1,5 +1,7 @@
 framework:
   secret: php-http
+  serializer:
+    enabled: true
   test: ~
 
 # Use auto discovery
@@ -10,11 +12,15 @@ httplug:
 
 api_service:
   apis:
-    with_client:
-      baseUrl: http://foo.com
-      schema: '%kernel.root_dir%/config/schema/foo.yml'
+    foo:
+      schema: 'file://%kernel.root_dir%/config/schema/foo.yml'
+    bar:
+      schema: 'file://%kernel.root_dir%/config/schema/foo.yml'
       client: httplug.client.foo
-    with_default_client:
-      baseUrl: http://bar.com
-      schema: '%kernel.root_dir%/config/schema/foo.yml'
+      config:
+        baseUrl: https://bar.com
+        validateRequest: false
+        validateResponse: true
+        returnResponse: true
+
 

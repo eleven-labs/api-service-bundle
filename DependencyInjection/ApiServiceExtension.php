@@ -1,13 +1,18 @@
 <?php
 namespace ElevenLabs\ApiServiceBundle\DependencyInjection;
 
+use ElevenLabs\Api\Decoder\Adapter\SymfonyDecoderAdapter;
+use ElevenLabs\Api\Decoder\DecoderInterface;
 use ElevenLabs\Api\Service\ApiService;
+use ElevenLabs\Api\Service\Denormalizer\ResourceDenormalizer;
 use ElevenLabs\ApiServiceBundle\Factory\DummyService;
+use JsonSchema\Validator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Serializer\Encoder\ChainDecoder;
 
 class ApiServiceExtension extends Extension
 {
@@ -23,37 +28,61 @@ class ApiServiceExtension extends Extension
         $loader->load('services.xml');
 
         foreach (['client', 'message_factory', 'uri_factory'] as $type) {
-            $container->setAlias(sprintf('api_service.%s', $type), $config['default'][$type]);
+            $container->setAlias(sprintf('api_service.%s', $type), $config['default_services'][$type]);
         }
 
-        $this->configureCacheConfig($container, $config['cache_dir']);
-        $this->configureApiServices($container, $config['apis']);
+        $this->configureSerializer($container);
+        $this->configureApiServices($container, $config['apis'], $config['cache']);
     }
 
-    public function configureCacheConfig(ContainerBuilder $container, $cacheDir)
+    public function configureSerializer(ContainerBuilder $container)
     {
-        $container->getDefinition('api_service.cache_factory')
-            ->replaceArgument(0, $cacheDir)
-            ->replaceArgument(1, $container->getParameter('kernel.debug'));
+        $container->setAlias('api_service.serializer', 'serializer');
+
+        $definition = $container->register('api_service.normalizer.resource', ResourceDenormalizer::class);
+        $definition->setPublic(false);
+        $definition->addTag('serializer.normalizer', array('priority' => -890));
     }
 
-    public function configureApiServices(ContainerBuilder $container, array $apiServices)
+    public function configureApiServices(ContainerBuilder $container, array $apiServices, array $cache)
     {
-        $serviceFactory = new Reference('api_service.factory.service');
+        $serviceFactoryRef = new Reference('api_service.factory');
 
+        // Register decoder
+        $definition = $container->register('api_service.decoder.symfony', ChainDecoder::class);
+        $definition->setArguments([
+            [
+                new Reference('serializer.encoder.json'),
+                new Reference('serializer.encoder.xml')
+            ]
+        ]);
+
+        $definition = $container->register('api_service.decoder', SymfonyDecoderAdapter::class);
+        $definition->setArguments([new Reference('api_service.decoder.symfony')]);
+
+        // Register validator
+        $validator = $container->register('api_service.json_schema_validator', Validator::class);
+        $validator->setPublic(false);
+
+        // Configure schema factory
+        $schemaFactoryId = 'api_service.schema_factory.swagger';
+        if ($cache['enabled']) {
+            $schemaFactoryId = 'api_service.schema_factory.cached_factory';
+            $schemaFactory = $container->getDefinition('api_service.schema_factory.cached_factory');
+            $schemaFactory->replaceArgument(0, new Reference($cache['service']));
+        }
+        $container->setAlias('api_service.schema_factory', $schemaFactoryId);
+
+        // Configure each api services
         foreach ($apiServices as $name => $arguments) {
-            $serviceId = 'api_service.api.'.$name;
 
-            $httpClientServiceId = (isset($arguments['client']))
-                ? $arguments['client']
-                : 'api_service.client';
-
-            $apiServiceFactory = $container
-                ->register($serviceId, ApiService::class)
-                ->setFactory([$serviceFactory, 'getService'])
-                ->addArgument(new Reference($httpClientServiceId))
-                ->addArgument($arguments['baseUrl'])
-                ->addArgument($arguments['schema']);
+            $container
+                ->register('api_service.api.'.$name, ApiService::class)
+                ->setFactory([$serviceFactoryRef, 'getService'])
+                ->addArgument(new Reference($arguments['client']))
+                ->addArgument(new Reference($schemaFactoryId))
+                ->addArgument($arguments['schema'])
+                ->addArgument($arguments['config']);
         }
     }
 

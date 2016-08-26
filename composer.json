@@ -11,8 +11,9 @@
   ],
   "require": {
     "php": "^5.6 || ^7.0",
-    "eleven-labs/api-service": "^0.1",
-    "symfony/framework-bundle": "^2.7 || ^3.0"
+    "eleven-labs/api-service": "^0.2",
+    "symfony/serializer": "^2.7||^3.0",
+    "symfony/framework-bundle": "^2.7 ||^3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.5 || ^5.4",
@@ -29,6 +30,7 @@
     }
   },
   "suggest": {
+    "php-http/guzzle6-adapter": "^1.1.1",
     "php-http/httplug-bundle": "Integrate HTTP Client into Symfony"
   },
   "scripts": {

@@ -10,7 +10,7 @@ class ServiceInstantiationTest extends WebTestCase
     {
         static::bootKernel();
         $container = static::$kernel->getContainer();
-        $apiService = $container->get('api_service.api.with_default_client');
+        $apiService = $container->get('api_service.api.foo');
 
         self::assertInstanceOf(ApiService::class, $apiService);
     }
@@ -19,7 +19,7 @@ class ServiceInstantiationTest extends WebTestCase
     {
         static::bootKernel();
         $container = static::$kernel->getContainer();
-        $apiService = $container->get('api_service.api.with_client');
+        $apiService = $container->get('api_service.api.bar');
 
         self::assertInstanceOf(ApiService::class, $apiService);
     }
