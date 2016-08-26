@@ -5,8 +5,6 @@ use ElevenLabs\Api\Decoder\DecoderInterface;
 use ElevenLabs\Api\Factory\SchemaFactory;
 use ElevenLabs\Api\Service\ApiService;
 use ElevenLabs\Api\Validator\MessageValidator;
-use ElevenLabs\Api\Validator\RequestValidator;
-use ElevenLabs\Api\Validator\SchemaLoader;
 use Http\Client\HttpClient;
 use Http\Message\MessageFactory;
 use Http\Message\UriFactory;

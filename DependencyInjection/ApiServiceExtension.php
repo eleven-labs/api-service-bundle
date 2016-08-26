@@ -2,10 +2,8 @@
 namespace ElevenLabs\ApiServiceBundle\DependencyInjection;
 
 use ElevenLabs\Api\Decoder\Adapter\SymfonyDecoderAdapter;
-use ElevenLabs\Api\Decoder\DecoderInterface;
 use ElevenLabs\Api\Service\ApiService;
 use ElevenLabs\Api\Service\Denormalizer\ResourceDenormalizer;
-use ElevenLabs\ApiServiceBundle\Factory\DummyService;
 use JsonSchema\Validator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
