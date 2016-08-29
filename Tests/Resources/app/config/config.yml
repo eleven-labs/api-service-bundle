@@ -1,16 +1,25 @@
 framework:
   secret: php-http
+  test: ~
+  # Enable framework serializer
   serializer:
     enabled: true
-  test: ~
 
-# Use auto discovery
+# PSR-6 cache provider for Symfony versions prior to 3.1
+cache_adapter:
+  providers:
+    default:
+      factory: 'cache.factory.void'
+
+# HttpCLient provided by httplug
 httplug:
   clients:
     foo:
       factory: 'httplug.factory.guzzle6'
 
 api_service:
+  cache:
+    service: 'cache'
   apis:
     foo:
       schema: 'file://%kernel.root_dir%/config/schema/foo.yml'

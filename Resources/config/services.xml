@@ -11,6 +11,7 @@
         <service id="api_service.schema_factory.swagger" class="ElevenLabs\Api\Factory\SwaggerSchemaFactory" public="false" />
         <service id="api_service.schema_factory.cached_factory" class="ElevenLabs\Api\Factory\CachedSchemaFactoryDecorator" public="false">
             <argument />
+            <argument />
         </service>
 
         <!-- Factory used to generate API Service instances -->

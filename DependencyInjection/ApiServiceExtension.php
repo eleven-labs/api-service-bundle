@@ -65,15 +65,16 @@ class ApiServiceExtension extends Extension
         // Configure schema factory
         $schemaFactoryId = 'api_service.schema_factory.swagger';
         if ($cache['enabled']) {
-            $schemaFactoryId = 'api_service.schema_factory.cached_factory';
             $schemaFactory = $container->getDefinition('api_service.schema_factory.cached_factory');
             $schemaFactory->replaceArgument(0, new Reference($cache['service']));
+            $schemaFactory->replaceArgument(1, new Reference($schemaFactoryId));
+            $schemaFactoryId = 'api_service.schema_factory.cached_factory';
         }
+
         $container->setAlias('api_service.schema_factory', $schemaFactoryId);
 
         // Configure each api services
         foreach ($apiServices as $name => $arguments) {
-
             $container
                 ->register('api_service.api.'.$name, ApiService::class)
                 ->setFactory([$serviceFactoryRef, 'getService'])

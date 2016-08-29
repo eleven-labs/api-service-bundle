@@ -6,25 +6,18 @@ use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Http\Message\UriFactory\GuzzleUriFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
-use Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass;
-use Symfony\Component\DependencyInjection\Compiler\ResolveParameterPlaceHoldersPass;
 
 class ApiServiceExtensionTest extends AbstractExtensionTestCase
 {
     protected function setUp()
     {
         parent::setUp();
-
         $this->setParameter('kernel.debug', true);
-        $this->setParameter('kernel.cache_dir', '/cache');
-
     }
 
     protected function getContainerExtensions()
     {
-        return [
-            new ApiServiceExtension(),
-        ];
+        return [new ApiServiceExtension()];
     }
 
     public function testConfigLoadDefault()
@@ -36,9 +29,9 @@ class ApiServiceExtensionTest extends AbstractExtensionTestCase
         }
     }
 
-    public function testHttpPlugIntegration()
+    public function testItUseHttpPlugServicesByDefault()
     {
-        // Register httplug service like the HttppludBundle SHOULD do
+        // Given services registered by th HTTPlug bundle
         $this->container->register('httplug.client', Client::class);
         $this->container->register('httplug.message_factory', GuzzleMessageFactory::class);
         $this->container->register('httplug.uri_factory', GuzzleUriFactory::class);
@@ -50,21 +43,30 @@ class ApiServiceExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService('api_service.uri_factory', GuzzleUriFactory::class);
     }
 
-    public function testConfigCacheConfig()
+    public function testItUseACachedSchemaFactory()
     {
-        $this->load();
-        $this->compile();
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument('api_service.cache_factory', 0, '/cache/api_service');
-    }
-
-    protected function compile()
-    {
-        $this->container->getCompilerPassConfig()->setOptimizationPasses([
-            new ResolveParameterPlaceHoldersPass(),
-            new ResolveDefinitionTemplatesPass(),
+        $this->load([
+            'cache' => [
+                'service' => 'fake.cache.service'
+            ]
         ]);
 
-        parent::compile();
+        $this->assertContainerBuilderHasAlias(
+            'api_service.schema_factory',
+            'api_service.schema_factory.cached_factory'
+        );
     }
 
+    public function testItProvideApiServices()
+    {
+        $this->load([
+            'apis' => [
+                'foo' => [
+                    'schema' => '/path/to/schema.json'
+                ]
+            ]
+        ]);
+
+        $this->assertContainerBuilderHasService('api_service.api.foo');
+    }
 }

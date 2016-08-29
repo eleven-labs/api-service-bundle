@@ -1,17 +1,19 @@
 <?php
 namespace ElevenLabs\ApiServiceBundle\Tests\Unit\Factory;
 
+use ElevenLabs\Api\Decoder\DecoderInterface;
+use ElevenLabs\Api\Factory\SchemaFactory;
+use ElevenLabs\Api\Schema;
 use ElevenLabs\Api\Service\ApiService;
-use ElevenLabs\Api\Service\UriTemplate\UriTemplate;
-use ElevenLabs\ApiServiceBundle\Factory\ConfigCacheFactory;
 use ElevenLabs\ApiServiceBundle\Factory\ServiceFactory;
 use Http\Client\HttpClient;
 use Http\Message\MessageFactory;
 use Http\Message\UriFactory;
+use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\UriInterface;
 use org\bovigo\vfs\vfsStream;
-use Symfony\Component\Config\ConfigCacheInterface;
+use Rize\UriTemplate;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class ServiceFactoryTest extends TestCase
 {
@@ -23,31 +25,39 @@ class ServiceFactoryTest extends TestCase
     /** @test */
     public function itShouldReturnAService()
     {
-        $aBaseUrl = 'http://domain.tld';
         $aSchemaFile = 'schema.json';
 
         $uriFactory = $this->prophesize(UriFactory::class);
         $uriTemplate = $this->prophesize(UriTemplate::class);
         $messageFactory = $this->prophesize(MessageFactory::class);
-        $configCache = $this->prophesize(ConfigCacheInterface::class);
-        $configCacheFactory = $this->prophesize(ConfigCacheFactory::class);
-
-        $uriFactory->createUri($aBaseUrl)->willReturn($this->prophesize(UriInterface::class));
-
-        $configCache->getPath()->willReturn(vfsStream::url('cache/schema.json.cache'));
-        $configCache->isFresh()->willReturn(true);
-
-        $configCacheFactory->getConfigCacheFrom($aSchemaFile)->willReturn($configCache);
+        $validator = $this->prophesize(Validator::class);
+        $serializer = $this->prophesize(SerializerInterface::class);
+        $decoder = $this->prophesize(DecoderInterface::class);
 
         $factory = new ServiceFactory(
             $uriFactory->reveal(),
             $uriTemplate->reveal(),
             $messageFactory->reveal(),
-            $configCacheFactory->reveal()
+            $validator->reveal(),
+            $serializer->reveal(),
+            $decoder->reveal()
         );
 
         $httpClient = $this->prophesize(HttpClient::class);
-        $service = $factory->getService($httpClient->reveal(), $aBaseUrl, $aSchemaFile);
+
+        $schema = $this->prophesize(Schema::class);
+        $schema->getSchemes()->willReturn(['http']);
+        $schema->getHost()->willReturn('domein.tld');
+
+        $schemaFactory = $this->prophesize(SchemaFactory::class);
+        $schemaFactory->createSchema($aSchemaFile)->shouldBeCalledTimes(1)->willReturn($schema);
+
+        $service = $factory->getService(
+            $httpClient->reveal(),
+            $schemaFactory->reveal(),
+            $aSchemaFile,
+            $config = []
+        );
 
         self::assertInstanceOf(ApiService::class, $service);
     }
