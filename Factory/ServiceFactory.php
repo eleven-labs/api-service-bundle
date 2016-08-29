@@ -1,14 +1,16 @@
 <?php
 namespace ElevenLabs\ApiServiceBundle\Factory;
 
+use ElevenLabs\Api\Decoder\DecoderInterface;
+use ElevenLabs\Api\Factory\SchemaFactory;
 use ElevenLabs\Api\Service\ApiService;
-use ElevenLabs\Api\Service\UriTemplate\UriTemplate;
-use ElevenLabs\Api\Validator\RequestValidator;
-use ElevenLabs\Api\Validator\SchemaLoader;
+use ElevenLabs\Api\Validator\MessageValidator;
 use Http\Client\HttpClient;
 use Http\Message\MessageFactory;
 use Http\Message\UriFactory;
 use JsonSchema\Validator;
+use Rize\UriTemplate;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Create an API Service
@@ -24,47 +26,64 @@ class ServiceFactory
     /** @var MessageFactory */
     private $messageFactory;
 
-    /** @var ConfigCacheFactory */
-    private $cacheFactory;
+    /** @var Validator */
+    private $validator;
+
+    /** @var SerializerInterface */
+    private $serializer;
+
+    /** @var \ElevenLabs\Api\Decoder\DecoderInterface */
+    private $decoder;
 
     /**
-     * ServiceFactory constructor.
      * @param UriFactory $uriFactory
      * @param UriTemplate $uriTemplate
      * @param MessageFactory $messageFactory
-     * @param ConfigCacheFactory $cacheFactory
+     * @param Validator $validator
+     * @param SerializerInterface $serializer
+     * @param DecoderInterface $decoder
      */
     public function __construct(
         UriFactory $uriFactory,
         UriTemplate $uriTemplate,
         MessageFactory $messageFactory,
-        ConfigCacheFactory $cacheFactory
+        Validator $validator,
+        SerializerInterface $serializer,
+        DecoderInterface $decoder
     ) {
         $this->uriFactory = $uriFactory;
         $this->uriTemplate = $uriTemplate;
         $this->messageFactory = $messageFactory;
-        $this->cacheFactory = $cacheFactory;
+        $this->validator = $validator;
+        $this->serializer = $serializer;
+        $this->decoder = $decoder;
     }
 
     /**
      * @param HttpClient $httpClient
-     * @param string $baseUrl
-     * @param string $schemaFile
+     * @param SchemaFactory $schemaFactory
+     * @param $schemaFile
+     * @param array $config
      *
      * @return ApiService
      */
-    public function getService(HttpClient $httpClient, $baseUrl, $schemaFile)
-    {
-        $cache = $this->cacheFactory->getConfigCacheFrom($schemaFile);
-        $schema = (new SchemaLoader($cache))->load($schemaFile);
+    public function getService(
+        HttpClient $httpClient,
+        SchemaFactory $schemaFactory,
+        $schemaFile,
+        $config = []
+    ) {
+        $schema = $schemaFactory->createSchema($schemaFile);
 
         return new ApiService(
-            $this->uriFactory->createUri($baseUrl),
+            $this->uriFactory,
             $this->uriTemplate,
             $httpClient,
             $this->messageFactory,
             $schema,
-            new RequestValidator($schema, new Validator())
+            new MessageValidator($this->validator, $this->decoder),
+            $this->serializer,
+            $config
         );
     }
 }

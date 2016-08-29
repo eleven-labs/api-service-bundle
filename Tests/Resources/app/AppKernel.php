@@ -12,6 +12,7 @@ class AppKernel extends Kernel
     {
         $bundles =  [
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new \Cache\AdapterBundle\CacheAdapterBundle(),
             new \Http\HttplugBundle\HttplugBundle(),
             new \ElevenLabs\ApiServiceBundle\ApiServiceBundle(),
         ];

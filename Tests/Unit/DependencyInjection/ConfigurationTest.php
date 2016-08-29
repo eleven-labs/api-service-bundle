@@ -7,15 +7,6 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionConfigurati
 
 class ConfigurationTest extends AbstractExtensionConfigurationTestCase
 {
-    private $emptyConfig = [
-        'cache_dir' => '%kernel.cache_dir%/api_service',
-        'default' => [
-            'client' => 'httplug.client',
-            'message_factory' => 'httplug.message_factory',
-            'uri_factory' => 'httplug.uri_factory',
-        ],
-        'apis' => [],
-    ];
 
     protected function getContainerExtension()
     {
@@ -29,34 +20,76 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
 
     public function testEmptyConfiguration()
     {
+        $expectedEmptyConfig = [
+            'default_services' => [
+                'client' => 'httplug.client',
+                'message_factory' => 'httplug.message_factory',
+                'uri_factory' => 'httplug.uri_factory',
+            ],
+            'cache' => [
+                'enabled' => false
+            ],
+            'pagination' => [],
+            'apis' => [],
+        ];
+
         $fixturesPath =  __DIR__.'/../../Resources/Fixtures';
 
-        $this->assertProcessedConfigurationEquals($this->emptyConfig, [$fixturesPath.'/config/empty.yml']);
+        $this->assertProcessedConfigurationEquals(
+            $expectedEmptyConfig,
+            [$fixturesPath.'/config/empty.yml']
+        );
     }
 
     public function testSupportsAllConfigFormats()
     {
-        $fixturesPath =  __DIR__.'/../../Resources/Fixtures';
-
         $expectedConfiguration = [
-            'cache_dir' => '/path/to/cache/dir',
-            'default' => [
-                'client' => 'custom_client',
-                'uri_factory' => 'custom_uri_factory',
-                'message_factory' => 'custom_message_factory',
+            'default_services' => [
+                'client' => 'httplug.client.acme',
+                'uri_factory' => 'my.uri_factory',
+                'message_factory' => 'my.message_factory',
+            ],
+            'cache' => [
+                'enabled' => true,
+                'service' => 'my.psr6_cache_impl'
+            ],
+            'pagination' => [
+                'header' => [
+                    'page' => 'X-Page',
+                    'perPage' => 'X-Per-Page',
+                    'totalPages' => 'X-Total-Pages',
+                    'totalItems' => 'X-Total-Items',
+                ]
             ],
             'apis' => [
                 'foo' => [
-                    'baseUrl' => 'https://foo.com',
-                    'schema' => '/path/to/foo.yml'
+                    'schema' => '/path/to/foo.yml',
+                    'client' => 'api_service.client',
+                    'config' => [
+                        'baseUrl' => null,
+                        'validateRequest' => true,
+                        'validateResponse' => false,
+                        'returnResponse' => false
+                    ]
                 ],
                 'bar' => [
-                    'baseUrl' => 'https://bar.com',
-                    'schema' => '/path/to/bar.json'
+                    'schema' => '/path/to/bar.json',
+                    'client' => 'httplug.client.bar',
+                    'config' => [
+                        'baseUrl' => 'https://bar.com',
+                        'validateRequest' => false,
+                        'validateResponse' => true,
+                        'returnResponse' => true
+                    ]
                 ]
             ],
         ];
 
-        $this->assertProcessedConfigurationEquals($expectedConfiguration, [$fixturesPath.'/config/full.yml']);
+        $fixturesPath =  __DIR__.'/../../Resources/Fixtures';
+
+        $this->assertProcessedConfigurationEquals(
+            $expectedConfiguration,
+            [$fixturesPath.'/config/full.yml']
+        );
     }
 }

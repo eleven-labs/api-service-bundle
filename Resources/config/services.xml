@@ -4,17 +4,39 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="api_service.uri_template" class="ElevenLabs\Api\Service\UriTemplate\Rize\RizeUriTemplateAdapter" public="false" />
-        <service id="api_service.cache_factory" class="ElevenLabs\ApiServiceBundle\Factory\ConfigCacheFactory" public="false">
+
+        <service id="api_service.uri_template" class="Rize\UriTemplate" public="false" />
+
+        <service id="api_service.denormalizer.resource" class="ElevenLabs\Api\Service\Denormalizer\ResourceDenormalizer" public="false">
+            <argument on-invalid="null" />
+            <tag name="serializer.normalizer" priority="-890" />
+        </service>
+
+        <service id="api_service.pagination_provider.chain" class="ElevenLabs\ApiServiceBundle\Pagination\PaginationProviderChain" public="false">
+            <argument type="collection" />
+        </service>
+
+        <service id="api_service.pagination_provider.header" class="ElevenLabs\Api\Service\Pagination\Provider\PaginationHeader" public="false">
+            <argument type="collection" />
+        </service>
+
+        <!-- Schema Factories -->
+
+        <service id="api_service.schema_factory.swagger" class="ElevenLabs\Api\Factory\SwaggerSchemaFactory" public="false" />
+        <service id="api_service.schema_factory.cached_factory" class="ElevenLabs\Api\Factory\CachedSchemaFactoryDecorator" public="false">
             <argument />
             <argument />
         </service>
 
-        <service id="api_service.factory.service" class="ElevenLabs\ApiServiceBundle\Factory\ServiceFactory">
+        <!-- Factory used to generate API Service instances -->
+
+        <service id="api_service.factory" class="ElevenLabs\ApiServiceBundle\Factory\ServiceFactory">
             <argument type="service" id="api_service.uri_factory" />
             <argument type="service" id="api_service.uri_template" />
             <argument type="service" id="api_service.message_factory" />
-            <argument type="service" id="api_service.cache_factory" />
+            <argument type="service" id="api_service.json_schema_validator" />
+            <argument type="service" id="api_service.serializer" />
+            <argument type="service" id="api_service.decoder" />
         </service>
     </services>
 </container>
