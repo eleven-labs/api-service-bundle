@@ -17,14 +17,14 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^5.4",
-    "symfony/symfony": "2.7.*",
+    "symfony/symfony": "^2.7 || ^3.0",
     "php-http/guzzle6-adapter": "^1.1.1",
     "php-http/httplug-bundle": "^1.0",
     "polishsymfonycommunity/symfony-mocker-container": "^1.0",
     "matthiasnoback/symfony-dependency-injection-test": "^1.0",
-    "mikey179/vfsStream": "^1.6",
     "cache/adapter-bundle": "^0.3.5",
-    "cache/void-adapter": "^0.3.1"
+    "cache/void-adapter": "^0.3.1",
+    "php-http/mock-client": "^0.3.2"
   },
   "autoload": {
     "psr-4": {
@@ -32,7 +32,7 @@
     }
   },
   "suggest": {
-    "php-http/httplug-bundle": "Integrate HTTP Client into Symfony",
+    "php-http/httplug-bundle": "Integrate HTTP Clients into Symfony",
     "php-http/guzzle6-adapter": "HttpClient adapter using Guzzle6",
     "cache/adapter-bundle": "Integrate cache pool providers in Symfony <3.1"
   },

@@ -20,6 +20,20 @@ definitions:
       name:
         type: string
 paths:
+  /collection:
+    get:
+      summary: Get a collection of object
+      operationId: getCollection
+      parameters:
+        - in: query
+          name: chips
+          type: string
+      responses:
+        200:
+          schema:
+            type: array
+            items:
+              type: object
   /foo/{bar}:
     post:
       summary: Test path

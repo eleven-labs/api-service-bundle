@@ -7,7 +7,21 @@
 
         <service id="api_service.uri_template" class="Rize\UriTemplate" public="false" />
 
+        <service id="api_service.denormalizer.resource" class="ElevenLabs\Api\Service\Denormalizer\ResourceDenormalizer" public="false">
+            <argument on-invalid="null" />
+            <tag name="serializer.normalizer" priority="-890" />
+        </service>
+
+        <service id="api_service.pagination_provider.chain" class="ElevenLabs\ApiServiceBundle\Pagination\PaginationProviderChain" public="false">
+            <argument type="collection" />
+        </service>
+
+        <service id="api_service.pagination_provider.header" class="ElevenLabs\Api\Service\Pagination\Provider\PaginationHeader" public="false">
+            <argument type="collection" />
+        </service>
+
         <!-- Schema Factories -->
+
         <service id="api_service.schema_factory.swagger" class="ElevenLabs\Api\Factory\SwaggerSchemaFactory" public="false" />
         <service id="api_service.schema_factory.cached_factory" class="ElevenLabs\Api\Factory\CachedSchemaFactoryDecorator" public="false">
             <argument />
@@ -15,6 +29,7 @@
         </service>
 
         <!-- Factory used to generate API Service instances -->
+
         <service id="api_service.factory" class="ElevenLabs\ApiServiceBundle\Factory\ServiceFactory">
             <argument type="service" id="api_service.uri_factory" />
             <argument type="service" id="api_service.uri_template" />

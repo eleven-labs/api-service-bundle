@@ -2,6 +2,7 @@
 namespace ElevenLabs\ApiServiceBundle\Tests\Functional;
 
 use ElevenLabs\Api\Service\ApiService;
+use GuzzleHttp\Psr7\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ServiceInstantiationTest extends WebTestCase

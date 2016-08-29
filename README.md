@@ -46,6 +46,14 @@ api_service:
   cache:
     # provide the Id of any PSR-6 cache service
     service: 'my_app.cache'
+  # (optional) configure supported pagination providers
+  pagination:
+    # extract pagination from response headers
+    header:
+      page: X-Page
+      perPage: X-Per-Page
+      totalPages: X-Total-Pages
+      totalItems: X-Total-Items
   # configure api services
   apis:
     my_service:

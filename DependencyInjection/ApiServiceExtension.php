@@ -4,6 +4,8 @@ namespace ElevenLabs\ApiServiceBundle\DependencyInjection;
 use ElevenLabs\Api\Decoder\Adapter\SymfonyDecoderAdapter;
 use ElevenLabs\Api\Service\ApiService;
 use ElevenLabs\Api\Service\Denormalizer\ResourceDenormalizer;
+use ElevenLabs\Api\Service\Pagination\Provider\PaginationHeader;
+use ElevenLabs\ApiServiceBundle\Pagination\PaginationProviderChain;
 use JsonSchema\Validator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,17 +31,32 @@ class ApiServiceExtension extends Extension
             $container->setAlias(sprintf('api_service.%s', $type), $config['default_services'][$type]);
         }
 
-        $this->configureSerializer($container);
+        $this->configureSerializer($container, $config['pagination']);
         $this->configureApiServices($container, $config['apis'], $config['cache']);
     }
 
-    public function configureSerializer(ContainerBuilder $container)
+    public function configureSerializer(ContainerBuilder $container, array $paginationProviders)
     {
         $container->setAlias('api_service.serializer', 'serializer');
+        $denormalizer = $container->getDefinition('api_service.denormalizer.resource');
 
-        $definition = $container->register('api_service.normalizer.resource', ResourceDenormalizer::class);
-        $definition->setPublic(false);
-        $definition->addTag('serializer.normalizer', array('priority' => -890));
+        if (!empty($paginationProviders)) {
+            $providers = [];
+
+            foreach ($paginationProviders as $name => $config) {
+                $providerId = 'api_service.pagination_provider.'.$name;
+                $provider = $container->getDefinition($providerId);
+                $provider->replaceArgument(0, $config);
+                $providers[] = new Reference($providerId);
+            }
+
+            $pagination = $container->getDefinition('api_service.pagination_provider.chain');
+            $pagination->replaceArgument(0, $providers);
+
+            $denormalizer->replaceArgument(0, new Reference('api_service.pagination_provider.chain'));
+        } else {
+            $denormalizer->replaceArgument(0, null);
+        }
     }
 
     public function configureApiServices(ContainerBuilder $container, array $apiServices, array $cache)

@@ -6,6 +6,7 @@ use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Http\Message\UriFactory\GuzzleUriFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use Symfony\Component\DependencyInjection\Reference;
 
 class ApiServiceExtensionTest extends AbstractExtensionTestCase
 {
@@ -68,5 +69,28 @@ class ApiServiceExtensionTest extends AbstractExtensionTestCase
         ]);
 
         $this->assertContainerBuilderHasService('api_service.api.foo');
+    }
+
+    public function testItProvidePagination()
+    {
+        $this->load([
+            'pagination' => [
+                'header' => []
+            ]
+        ]);
+
+        $expectedReference = new Reference('api_service.pagination_provider.chain');
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            'api_service.denormalizer.resource',
+            0,
+            $expectedReference
+        );
+
+        $expectedReferences = [new Reference('api_service.pagination_provider.header')];
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            'api_service.pagination_provider.chain',
+            0,
+            $expectedReferences
+        );
     }
 }

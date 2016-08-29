@@ -5,6 +5,8 @@ api_service:
     uri_factory: my.uri_factory
   cache:
     service: my.psr6_cache_impl
+  pagination:
+    header: ~
   apis:
     foo:
       schema: /path/to/foo.yml

@@ -20,6 +20,8 @@ httplug:
 api_service:
   cache:
     service: 'cache'
+  pagination:
+    header: ~
   apis:
     foo:
       schema: 'file://%kernel.root_dir%/config/schema/foo.yml'

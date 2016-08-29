@@ -17,11 +17,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ServiceFactoryTest extends TestCase
 {
-    public function setUp()
-    {
-        vfsStream::setup('cache', 0600, ['schema.json.cache' => '']);
-    }
-
     /** @test */
     public function itShouldReturnAService()
     {

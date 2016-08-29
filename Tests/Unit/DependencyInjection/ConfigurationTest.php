@@ -29,6 +29,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
             'cache' => [
                 'enabled' => false
             ],
+            'pagination' => [],
             'apis' => [],
         ];
 
@@ -51,6 +52,14 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
             'cache' => [
                 'enabled' => true,
                 'service' => 'my.psr6_cache_impl'
+            ],
+            'pagination' => [
+                'header' => [
+                    'page' => 'X-Page',
+                    'perPage' => 'X-Per-Page',
+                    'totalPages' => 'X-Total-Pages',
+                    'totalItems' => 'X-Total-Items',
+                ]
             ],
             'apis' => [
                 'foo' => [
