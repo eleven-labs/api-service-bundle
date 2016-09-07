@@ -64,7 +64,7 @@ api_service:
       # (optional) fine tune your api service
       config:
         # provide a base url
-        baseUrl: https://bar.com
+        baseUri: https://bar.com
         # validate request
         validateRequest: true
         # validate response

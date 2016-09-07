@@ -29,7 +29,7 @@ api_service:
       schema: 'file://%kernel.root_dir%/config/schema/foo.yml'
       client: httplug.client.foo
       config:
-        baseUrl: https://bar.com
+        baseUri: https://bar.com
         validateRequest: false
         validateResponse: true
         returnResponse: true

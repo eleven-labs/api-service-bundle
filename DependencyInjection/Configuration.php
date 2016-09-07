@@ -83,7 +83,7 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('config')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('baseUrl')->defaultValue(null)->info('The url of your service (ex: http://domain.tld)')->end()
+                                ->scalarNode('baseUri')->defaultValue(null)->info('The uri of your service (ex: http://domain.tld)')->end()
                                 ->scalarNode('validateRequest')->defaultTrue()->info('Validate the request before sending it')->end()
                                 ->scalarNode('validateResponse')->defaultFalse()->info('Validate the response before sending it')->end()
                                 ->scalarNode('returnResponse')->defaultFalse()->info('Return a Response object instead of a resource')->end()

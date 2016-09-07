@@ -66,7 +66,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                     'schema' => '/path/to/foo.yml',
                     'client' => 'api_service.client',
                     'config' => [
-                        'baseUrl' => null,
+                        'baseUri' => null,
                         'validateRequest' => true,
                         'validateResponse' => false,
                         'returnResponse' => false
@@ -76,7 +76,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                     'schema' => '/path/to/bar.json',
                     'client' => 'httplug.client.bar',
                     'config' => [
-                        'baseUrl' => 'https://bar.com',
+                        'baseUri' => 'https://bar.com',
                         'validateRequest' => false,
                         'validateResponse' => true,
                         'returnResponse' => true
