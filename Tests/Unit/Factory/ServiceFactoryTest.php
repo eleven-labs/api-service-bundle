@@ -42,7 +42,7 @@ class ServiceFactoryTest extends TestCase
 
         $schema = $this->prophesize(Schema::class);
         $schema->getSchemes()->willReturn(['http']);
-        $schema->getHost()->willReturn('domein.tld');
+        $schema->getHost()->willReturn('domain.tld');
 
         $schemaFactory = $this->prophesize(SchemaFactory::class);
         $schemaFactory->createSchema($aSchemaFile)->shouldBeCalledTimes(1)->willReturn($schema);

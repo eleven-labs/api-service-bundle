@@ -14,7 +14,7 @@ api_service:
       schema: /path/to/bar.json
       client: httplug.client.bar
       config:
-        baseUrl: https://bar.com
+        baseUri: https://bar.com
         validateRequest: false
         validateResponse: true
         returnResponse: true

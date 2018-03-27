@@ -20,6 +20,10 @@
             <argument type="collection" />
         </service>
 
+        <service id="api_service.pagination_provider.hateoas" class="ElevenLabs\Api\Service\Pagination\Provider\HateoasPagination" public="false">
+            <argument type="collection" />
+        </service>
+
         <!-- Schema Factories -->
 
         <service id="api_service.schema_factory.swagger" class="ElevenLabs\Api\Factory\SwaggerSchemaFactory" public="false" />
