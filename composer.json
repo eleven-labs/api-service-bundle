@@ -9,15 +9,20 @@
       "email": "gcanal@eleven-labs.com"
     }
   ],
+  "repositories":
+  [
+    {
+      "type": "vcs",
+      "url":  "https://github.com/ThibautAlgrin/api-service"
+    }
+  ],
   "require": {
     "php": "^5.6 || ^7.0",
-    "eleven-labs/api-service": "^0.2",
-    "symfony/serializer": "^2.7 || ^3.0",
-    "symfony/framework-bundle": "^2.7 || ^3.0"
+    "eleven-labs/api-service": "dev-master",
+    "symfony/serializer": "^2.7 || ^3.0 || ^4.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.4",
-    "symfony/symfony": "^2.7 || ^3.0",
     "php-http/guzzle6-adapter": "^1.1.1",
     "php-http/httplug-bundle": "^1.0",
     "polishsymfonycommunity/symfony-mocker-container": "^1.0",
