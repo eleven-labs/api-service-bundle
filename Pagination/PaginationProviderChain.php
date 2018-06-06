@@ -28,7 +28,7 @@ class PaginationProviderChain implements PaginationProvider
 
     }
 
-    public function getPagination(array $data, ResponseInterface $response, ResponseDefinition $responseDefinition)
+    public function getPagination(array &$data, ResponseInterface $response, ResponseDefinition $responseDefinition)
     {
         if ($this->matchedProvider === null) {
             throw new \LogicException('No pagination provider available');
