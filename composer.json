@@ -18,15 +18,16 @@
   ],
   "require": {
     "php": "^5.6 || ^7.0",
-    "eleven-labs/api-service": "dev-master",
-    "symfony/serializer": "^2.7 || ^3.0 || ^4.0"
+    "eleven-labs/api-service": "^0.3",
+    "symfony/serializer": "^2.7 || ^3.0 || ^4.0",
+    "symfony/framework-bundle": "^2.7 || ^3.0 || ^4.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.4",
+    "phpunit/phpunit": "^6.1",
     "php-http/guzzle6-adapter": "^1.1.1",
     "php-http/httplug-bundle": "^1.0",
     "polishsymfonycommunity/symfony-mocker-container": "^1.0",
-    "matthiasnoback/symfony-dependency-injection-test": "^1.0",
+    "matthiasnoback/symfony-dependency-injection-test": "^2.0",
     "cache/adapter-bundle": "^1.2",
     "cache/void-adapter": "^1.0",
     "php-http/mock-client": "^0.3.2"

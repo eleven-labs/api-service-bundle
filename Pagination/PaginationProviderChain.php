@@ -22,6 +22,8 @@ class PaginationProviderChain implements PaginationProvider
      */
     public function __construct(array $providers)
     {
+        $this->providers = [];
+        $this->matchedProvider = null;
         foreach ($providers as $provider) {
             $this->addProvider($provider);
         }

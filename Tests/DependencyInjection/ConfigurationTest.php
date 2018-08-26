@@ -33,7 +33,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
             'apis' => [],
         ];
 
-        $fixturesPath =  __DIR__.'/../../Resources/Fixtures';
+        $fixturesPath =  __DIR__.'/../Resources/Fixtures';
 
         $this->assertProcessedConfigurationEquals(
             $expectedEmptyConfig,
@@ -85,7 +85,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
             ],
         ];
 
-        $fixturesPath =  __DIR__.'/../../Resources/Fixtures';
+        $fixturesPath =  __DIR__.'/../Resources/Fixtures';
 
         $this->assertProcessedConfigurationEquals(
             $expectedConfiguration,

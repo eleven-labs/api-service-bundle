@@ -8,10 +8,7 @@
          syntaxCheck="true">
     <testsuites>
         <testsuite name="ApiServiceBundle unit tests">
-            <directory suffix="Test.php">./Tests/Unit</directory>
-        </testsuite>
-        <testsuite name="ApiServiceBundle functional tests">
-            <directory suffix="Test.php">./Tests/Functional</directory>
+            <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
 
@@ -28,5 +25,6 @@
 
     <php>
         <server name="KERNEL_DIR" value="./Tests/Resources/app" />
+        <!--<server name="KERNEL_CLASS" value="./Tests/Resources/app/AppKernel.php" />-->
     </php>
 </phpunit>
