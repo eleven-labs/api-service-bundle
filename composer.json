@@ -9,13 +9,6 @@
       "email": "gcanal@eleven-labs.com"
     }
   ],
-  "repositories":
-  [
-    {
-      "type": "vcs",
-      "url":  "https://github.com/ThibautAlgrin/api-service"
-    }
-  ],
   "require": {
     "php": "^5.6 || ^7.0",
     "eleven-labs/api-service": "^0.3",
