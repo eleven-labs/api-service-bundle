@@ -1,5 +1,10 @@
 # API Service Bundle
 
+[![Build Status](https://travis-ci.org/eleven-labs/api-service-bundle.svg?branch=master)](https://travis-ci.org/eleven-labs/api-service-bundle)
+[![Code Coverage](https://scrutinizer-ci.com/g/eleven-labs/api-service-bundle/badges/coverage.png)](https://scrutinizer-ci.com/g/eleven-labs/api-service-bundle/)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/eleven-labs/api-service-bundle/badges/quality-score.png)](https://scrutinizer-ci.com/g/eleven-labs/api-service-bundle/)
+
+
 This bundle integrate the [API Service Component](https://github.com/eleven-labs/api-service) 
 into Symfony.
 
