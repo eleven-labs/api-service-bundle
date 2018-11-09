@@ -25,7 +25,6 @@ class PaginationProviderChain implements PaginationProvider
         foreach ($providers as $provider) {
             $this->addProvider($provider);
         }
-
     }
 
     public function getPagination(array &$data, ResponseInterface $response, ResponseDefinition $responseDefinition)
@@ -43,8 +42,7 @@ class PaginationProviderChain implements PaginationProvider
 
     public function supportPagination(array $data, ResponseInterface $response, ResponseDefinition $responseDefinition)
     {
-        foreach ($this->providers as $index => $provider)
-        {
+        foreach ($this->providers as $index => $provider) {
             if ($provider->supportPagination($data, $response, $responseDefinition)) {
                 $this->matchedProvider = $provider;
                 return true;
@@ -58,5 +56,4 @@ class PaginationProviderChain implements PaginationProvider
     {
         $this->providers[] = $provider;
     }
-
 }

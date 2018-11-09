@@ -1,8 +1,6 @@
 <?php
-namespace ElevenLabs\ApiServiceBundle\Tests\Unit\DependencyInjection;
+namespace ElevenLabs\ApiServiceBundle\DependencyInjection;
 
-use ElevenLabs\ApiServiceBundle\DependencyInjection\Configuration;
-use ElevenLabs\ApiServiceBundle\DependencyInjection\ApiServiceExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionConfigurationTestCase;
 
 class ConfigurationTest extends AbstractExtensionConfigurationTestCase

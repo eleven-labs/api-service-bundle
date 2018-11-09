@@ -23,7 +23,7 @@ paths:
   /collection:
     get:
       summary: Get a collection of object
-      operationId: getCollection
+      operationId: getFooCollection
       parameters:
         - in: query
           name: chips
@@ -34,23 +34,11 @@ paths:
             type: array
             items:
               type: object
-  /foo/{bar}:
+  /foo:
     post:
       summary: Test path
       operationId: addFoo
       parameters:
-      - name: bar
-        in: path
-        type: string
-        required: true
-      - name: baz
-        in: query
-        type: string
-        required: true
-      - name: x-bat
-        in: header
-        type: string
-        required: true
       - name: foo
         in: body
         required: true

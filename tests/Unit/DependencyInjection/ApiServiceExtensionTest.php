@@ -1,7 +1,6 @@
 <?php
-namespace ElevenLabs\ApiServiceBundle\Tests\Unit\DependencyInjection;
+namespace ElevenLabs\ApiServiceBundle\DependencyInjection;
 
-use ElevenLabs\ApiServiceBundle\DependencyInjection\ApiServiceExtension;
 use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Http\Message\UriFactory\GuzzleUriFactory;
