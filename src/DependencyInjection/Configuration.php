@@ -61,7 +61,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('pagination')
                     ->info('Pagination providers')
-                    ->arrayPrototype()
+                    ->prototype('array')
                         ->children()
                             ->scalarNode('page')->defaultValue('X-Page')->end()
                             ->scalarNode('perPage')->defaultValue('X-Per-Page')->end()
