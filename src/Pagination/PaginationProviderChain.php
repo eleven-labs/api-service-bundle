@@ -1,4 +1,5 @@
 <?php
+
 namespace ElevenLabs\ApiServiceBundle\Pagination;
 
 use ElevenLabs\Api\Definition\ResponseDefinition;
@@ -22,11 +23,20 @@ class PaginationProviderChain implements PaginationProvider
      */
     public function __construct(array $providers)
     {
+        $this->providers = [];
+        $this->matchedProvider = null;
         foreach ($providers as $provider) {
             $this->addProvider($provider);
         }
     }
 
+    /**
+     * @param array              $data
+     * @param ResponseInterface  $response
+     * @param ResponseDefinition $responseDefinition
+     *
+     * @return mixed
+     */
     public function getPagination(array &$data, ResponseInterface $response, ResponseDefinition $responseDefinition)
     {
         if ($this->matchedProvider === null) {
@@ -40,6 +50,13 @@ class PaginationProviderChain implements PaginationProvider
         return $pagination;
     }
 
+    /**
+     * @param array              $data
+     * @param ResponseInterface  $response
+     * @param ResponseDefinition $responseDefinition
+     *
+     * @return bool
+     */
     public function supportPagination(array $data, ResponseInterface $response, ResponseDefinition $responseDefinition)
     {
         foreach ($this->providers as $index => $provider) {
@@ -52,6 +69,9 @@ class PaginationProviderChain implements PaginationProvider
         return false;
     }
 
+    /**
+     * @param PaginationProvider $provider
+     */
     private function addProvider(PaginationProvider $provider)
     {
         $this->providers[] = $provider;

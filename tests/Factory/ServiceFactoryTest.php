@@ -1,10 +1,12 @@
 <?php
-namespace ElevenLabs\ApiServiceBundle\Factory;
+
+namespace ElevenLabs\ApiServiceBundle\Tests\Factory;
 
 use ElevenLabs\Api\Decoder\DecoderInterface;
 use ElevenLabs\Api\Factory\SchemaFactory;
 use ElevenLabs\Api\Schema;
 use ElevenLabs\Api\Service\ApiService;
+use ElevenLabs\ApiServiceBundle\Factory\ServiceFactory;
 use Http\Client\HttpClient;
 use Http\Message\MessageFactory;
 use Http\Message\UriFactory;
