@@ -3,7 +3,7 @@
 namespace ElevenLabs\ApiServiceBundle\Tests\Factory;
 
 use ElevenLabs\Api\Decoder\DecoderInterface;
-use ElevenLabs\Api\Factory\SchemaFactory;
+use ElevenLabs\Api\Factory\SchemaFactoryInterface;
 use ElevenLabs\Api\Schema;
 use ElevenLabs\Api\Service\ApiService;
 use ElevenLabs\ApiServiceBundle\Factory\ServiceFactory;
@@ -13,6 +13,7 @@ use Http\Message\UriFactory;
 use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
+use Psr\Http\Message\UriInterface;
 use Rize\UriTemplate;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -23,7 +24,11 @@ class ServiceFactoryTest extends TestCase
     {
         $aSchemaFile = 'schema.json';
 
+        $uri = $this->prophesize(UriInterface::class);
+
         $uriFactory = $this->prophesize(UriFactory::class);
+        $uriFactory->createUri('http://domain.tld')->willReturn($uri);
+
         $uriTemplate = $this->prophesize(UriTemplate::class);
         $messageFactory = $this->prophesize(MessageFactory::class);
         $validator = $this->prophesize(Validator::class);
@@ -45,7 +50,7 @@ class ServiceFactoryTest extends TestCase
         $schema->getSchemes()->willReturn(['http']);
         $schema->getHost()->willReturn('domain.tld');
 
-        $schemaFactory = $this->prophesize(SchemaFactory::class);
+        $schemaFactory = $this->prophesize(SchemaFactoryInterface::class);
         $schemaFactory->createSchema($aSchemaFile)->shouldBeCalledTimes(1)->willReturn($schema);
 
         $service = $factory->getService(

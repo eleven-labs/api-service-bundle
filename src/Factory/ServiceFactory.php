@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ElevenLabs\ApiServiceBundle\Factory;
 
 use ElevenLabs\Api\Decoder\DecoderInterface;
 use ElevenLabs\Api\Factory\SchemaFactory;
+use ElevenLabs\Api\Factory\SchemaFactoryInterface;
 use ElevenLabs\Api\Service\ApiService;
 use ElevenLabs\Api\Validator\MessageValidator;
 use Http\Client\HttpClient;
@@ -37,21 +40,15 @@ class ServiceFactory
     private $decoder;
 
     /**
-     * @param UriFactory $uriFactory
-     * @param UriTemplate $uriTemplate
-     * @param MessageFactory $messageFactory
-     * @param Validator $validator
+     * @param UriFactory          $uriFactory
+     * @param UriTemplate         $uriTemplate
+     * @param MessageFactory      $messageFactory
+     * @param Validator           $validator
      * @param SerializerInterface $serializer
-     * @param DecoderInterface $decoder
+     * @param DecoderInterface    $decoder
      */
-    public function __construct(
-        UriFactory $uriFactory,
-        UriTemplate $uriTemplate,
-        MessageFactory $messageFactory,
-        Validator $validator,
-        SerializerInterface $serializer,
-        DecoderInterface $decoder
-    ) {
+    public function __construct(UriFactory $uriFactory, UriTemplate $uriTemplate, MessageFactory $messageFactory, Validator $validator, SerializerInterface $serializer, DecoderInterface $decoder)
+    {
         $this->uriFactory = $uriFactory;
         $this->uriTemplate = $uriTemplate;
         $this->messageFactory = $messageFactory;
@@ -61,19 +58,17 @@ class ServiceFactory
     }
 
     /**
-     * @param HttpClient $httpClient
-     * @param SchemaFactory $schemaFactory
-     * @param $schemaFile
-     * @param array $config
+     * @param HttpClient             $httpClient
+     * @param SchemaFactoryInterface $schemaFactory
+     * @param string                 $schemaFile
+     * @param array                  $config
+     *
+     * @throws \Assert\AssertionFailedException
      *
      * @return ApiService
      */
-    public function getService(
-        HttpClient $httpClient,
-        SchemaFactory $schemaFactory,
-        $schemaFile,
-        $config = []
-    ) {
+    public function getService(HttpClient $httpClient, SchemaFactoryInterface $schemaFactory, string $schemaFile, array $config = []): ApiService
+    {
         $schema = $schemaFactory->createSchema($schemaFile);
 
         return new ApiService(

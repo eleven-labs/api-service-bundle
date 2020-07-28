@@ -15,6 +15,9 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Serializer\Encoder\ChainDecoder;
 
+/**
+ * Class ApiServiceExtension.
+ */
 class ApiServiceExtension extends Extension
 {
     /**
@@ -36,42 +39,31 @@ class ApiServiceExtension extends Extension
         $this->configureApiServices($container, $config['apis'], $config['cache']);
     }
 
-    public function configureSerializer(ContainerBuilder $container, array $paginationProviders)
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $paginationProviders
+     */
+    private function configureSerializer(ContainerBuilder $container, array $paginationProviders)
     {
         $container->setAlias('api_service.serializer', 'serializer');
         $denormalizer = $container->getDefinition('api_service.denormalizer.resource');
 
         if (!empty($paginationProviders)) {
-            $providers = [];
-
-            foreach ($paginationProviders as $name => $config) {
-                $providerId = 'api_service.pagination_provider.'.$name;
-                $provider = $container->getDefinition($providerId);
-                $provider->replaceArgument(0, $config);
-                $providers[] = new Reference($providerId);
-            }
-
-            $pagination = $container->getDefinition('api_service.pagination_provider.chain');
-            $pagination->replaceArgument(0, $providers);
-
             $denormalizer->replaceArgument(0, new Reference('api_service.pagination_provider.chain'));
-        } else {
-            $denormalizer->replaceArgument(0, null);
         }
     }
 
-    public function configureApiServices(ContainerBuilder $container, array $apiServices, array $cache)
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $apiServices
+     * @param array            $cache
+     */
+    private function configureApiServices(ContainerBuilder $container, array $apiServices, array $cache)
     {
         $serviceFactoryRef = new Reference('api_service.factory');
 
         // Register decoder
-        $definition = $container->register('api_service.decoder.symfony', ChainDecoder::class);
-        $definition->setArguments([
-            [
-                new Reference('serializer.encoder.json'),
-                new Reference('serializer.encoder.xml')
-            ]
-        ]);
+        $container->register('api_service.decoder.symfony', ChainDecoder::class);
 
         $definition = $container->register('api_service.decoder', SymfonyDecoderAdapter::class);
         $definition->setArguments([new Reference('api_service.decoder.symfony')]);

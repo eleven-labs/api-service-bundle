@@ -4,7 +4,7 @@ namespace ElevenLabs\ApiServiceBundle\Tests\Pagination;
 
 use ElevenLabs\Api\Definition\ResponseDefinition;
 use ElevenLabs\Api\Service\Pagination\Pagination;
-use ElevenLabs\Api\Service\Pagination\PaginationProvider;
+use ElevenLabs\Api\Service\Pagination\Provider\PaginationProviderInterface;
 use ElevenLabs\ApiServiceBundle\Pagination\PaginationProviderChain;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
@@ -30,7 +30,7 @@ class PaginationProviderChainTest extends TestCase
     {
         $providers = [];
         for ($i = 0; $i < 1; $i++) {
-            $provider = $this->createMock(PaginationProvider::class);
+            $provider = $this->createMock(PaginationProviderInterface::class);
             $provider->expects($this->once())->method('supportPagination')->willReturn(false);
             $providers[] = $provider;
         }
@@ -50,7 +50,7 @@ class PaginationProviderChainTest extends TestCase
     {
         $providers = [];
         for ($i = 0; $i < 1; $i++) {
-            $provider = $this->createMock(PaginationProvider::class);
+            $provider = $this->createMock(PaginationProviderInterface::class);
             $provider->expects($this->once())->method('supportPagination')->willReturn(true);
             $providers[] = $provider;
         }
@@ -91,7 +91,7 @@ class PaginationProviderChainTest extends TestCase
         $data = [];
         $pagination = $this->getMockBuilder(Pagination::class)->disableOriginalConstructor()->getMock();
 
-        $provider = $this->createMock(PaginationProvider::class);
+        $provider = $this->createMock(PaginationProviderInterface::class);
         $provider->expects($this->once())->method('supportPagination')->willReturn(true);
         $provider->expects($this->once())->method('getPagination')->willReturn($pagination);
 
