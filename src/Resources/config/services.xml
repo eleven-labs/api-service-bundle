@@ -16,6 +16,10 @@
             <tag name="serializer.normalizer" priority="-890" />
         </service>
 
+        <service id="api_service.denormalizer.error" class="ElevenLabs\Api\Service\Denormalizer\ErrorDenormalizer" public="false">
+            <tag name="serializer.normalizer" priority="-890" />
+        </service>
+
         <!-- Provider -->
 
         <service id="api_service.pagination_provider.chain" class="ElevenLabs\ApiServiceBundle\Pagination\PaginationProviderChain" public="false">
