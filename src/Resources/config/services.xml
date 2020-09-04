@@ -12,7 +12,6 @@
         </service>
 
         <service id="api_service.denormalizer.resource" class="ElevenLabs\Api\Service\Denormalizer\ResourceDenormalizer" public="false">
-            <argument on-invalid="null" />
             <tag name="serializer.normalizer" priority="-890" />
         </service>
 
