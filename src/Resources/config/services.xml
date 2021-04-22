@@ -7,10 +7,20 @@
 
         <service id="api_service.uri_template" class="Rize\UriTemplate" public="false" />
 
+        <service id="api_service.command.manifest" class="ElevenLabs\ApiServiceBundle\Command\ManifestCommand" public="false">
+            <tag name="console.command" />
+        </service>
+
         <service id="api_service.denormalizer.resource" class="ElevenLabs\Api\Service\Denormalizer\ResourceDenormalizer" public="false">
-            <argument on-invalid="null" />
+            <argument />
             <tag name="serializer.normalizer" priority="-890" />
         </service>
+
+        <service id="api_service.denormalizer.error" class="ElevenLabs\Api\Service\Denormalizer\ErrorDenormalizer" public="false">
+            <tag name="serializer.normalizer" priority="-890" />
+        </service>
+
+        <!-- Provider -->
 
         <service id="api_service.pagination_provider.chain" class="ElevenLabs\ApiServiceBundle\Pagination\PaginationProviderChain" public="false">
             <argument type="collection" />
@@ -18,6 +28,22 @@
 
         <service id="api_service.pagination_provider.header" class="ElevenLabs\Api\Service\Pagination\Provider\PaginationHeader" public="false">
             <argument type="collection" />
+            <tag name="api_service.pagination_provider" provider="header" />
+        </service>
+
+        <service id="api_service.pagination_provider.hal" class="ElevenLabs\Api\Service\Pagination\Provider\HalProvider" public="false">
+            <argument type="collection" />
+            <tag name="api_service.pagination_provider" provider="hal" />
+        </service>
+
+        <!-- Encoder -->
+
+        <service id="api_validator.encoder.hal" class="ElevenLabs\Api\Encoder\HalJsonEncoder" public="false">
+            <tag name="serializer.encoder" priority="100" />
+        </service>
+
+        <service id="api_validator.encoder.problem" class="ElevenLabs\Api\Encoder\ProblemJsonEncoder" public="false">
+            <tag name="serializer.encoder" priority="100" />
         </service>
 
         <!-- Schema Factories -->

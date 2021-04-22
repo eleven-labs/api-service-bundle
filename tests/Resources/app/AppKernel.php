@@ -3,6 +3,9 @@
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
+/**
+ * Class AppKernel.
+ */
 class AppKernel extends Kernel
 {
     /**
@@ -16,7 +19,7 @@ class AppKernel extends Kernel
             new \Http\HttplugBundle\HttplugBundle(),
             new \ElevenLabs\ApiServiceBundle\ApiServiceBundle(),
         ];
-        
+
         return $bundles;
     }
 

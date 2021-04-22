@@ -2,6 +2,7 @@ parameters:
     level: 0
     paths:
         - src
-        - tests/Unit
-        - tests/Functional
+        - tests/DependencyInjection
+        - tests/Factory
+        - tests/Pagination
 

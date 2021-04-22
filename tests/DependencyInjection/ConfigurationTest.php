@@ -1,6 +1,9 @@
 <?php
-namespace ElevenLabs\ApiServiceBundle\DependencyInjection;
 
+namespace ElevenLabs\ApiServiceBundle\Tests\DependencyInjection;
+
+use ElevenLabs\ApiServiceBundle\DependencyInjection\Configuration;
+use ElevenLabs\ApiServiceBundle\DependencyInjection\ApiServiceExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionConfigurationTestCase;
 
 class ConfigurationTest extends AbstractExtensionConfigurationTestCase
@@ -31,7 +34,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
             'apis' => [],
         ];
 
-        $fixturesPath =  __DIR__.'/../../Resources/Fixtures';
+        $fixturesPath =  __DIR__.'/../Resources/Fixtures';
 
         $this->assertProcessedConfigurationEquals(
             $expectedEmptyConfig,
@@ -83,7 +86,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
             ],
         ];
 
-        $fixturesPath =  __DIR__.'/../../Resources/Fixtures';
+        $fixturesPath =  __DIR__.'/../Resources/Fixtures';
 
         $this->assertProcessedConfigurationEquals(
             $expectedConfiguration,

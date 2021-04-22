@@ -9,10 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
- * This class contains the configuration information for the bundle.
- *
- * This information is solely responsible for how the different configuration
- * sections are normalized, and merged.
+ * Class Configuration.
  */
 class Configuration implements ConfigurationInterface
 {
@@ -61,15 +58,13 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('pagination')
                     ->info('Pagination providers')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->arrayNode('header')
-                            ->children()
-                                ->scalarNode('page')->defaultValue('X-Page')->end()
-                                ->scalarNode('perPage')->defaultValue('X-Per-Page')->end()
-                                ->scalarNode('totalPages')->defaultValue('X-Total-Pages')->end()
-                                ->scalarNode('totalItems')->defaultValue('X-Total-Items')->end()
-                            ->end()
+                    ->useAttributeAsKey('name')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('page')->defaultValue('X-Page')->end()
+                            ->scalarNode('perPage')->defaultValue('X-Per-Page')->end()
+                            ->scalarNode('totalPages')->defaultValue('X-Total-Pages')->end()
+                            ->scalarNode('totalItems')->defaultValue('X-Total-Items')->end()
                         ->end()
                     ->end()
                 ->end()

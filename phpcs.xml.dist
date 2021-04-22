@@ -15,7 +15,8 @@
     <rule ref="PSR2"/>
 
     <file>./src</file>
-    <file>./tests/Unit</file>
-    <file>./tests/Functional</file>
+    <file>./tests/DependencyInjection</file>
+    <file>./tests/Factory</file>
+    <file>./tests/Pagination</file>
 </ruleset>
 
