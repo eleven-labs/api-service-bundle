@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ElevenLabs\ApiServiceBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\ArrayNode;
@@ -13,30 +15,10 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * Whether to use the debug mode.
-     *
-     * @see https://github.com/doctrine/DoctrineBundle/blob/v1.5.2/DependencyInjection/Configuration.php#L31-L41
-     *
-     * @var bool
-     */
-    private $debug;
-
-    /**
-     * @param bool $debug
-     */
-    public function __construct($debug)
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $this->debug = (bool) $debug;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder()
-    {
-        $treeBuilder = new TreeBuilder('api_service');
-        $rootNode = $treeBuilder->getRootNode();
+        $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('api_service');
 
         $rootNode
             ->children()
@@ -87,7 +69,8 @@ class Configuration implements ConfigurationInterface
 
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $treeBuilder;
     }

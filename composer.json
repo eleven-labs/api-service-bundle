@@ -3,18 +3,32 @@
   "description": "Integrate API Service into Symfony",
   "type": "symfony-bundle",
   "license": "MIT",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/ThibautAlgrin/api-service"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/ThibautAlgrin/http-replay-plugin"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/ThibautAlgrin/api-validator"
+    }
+  ],
   "authors": [
     {
-      "name": "Guillem CANAL",
-      "email": "gcanal@eleven-labs.com"
+      "name": "Thibaut ALGRIN",
+      "email": "algrin.thibaut@gmail.com"
     }
   ],
   "require": {
-    "php": "^7.1",
+    "php": "^7.4",
     "ext-json": "*",
-    "eleven-labs/api-service": "^0.3 || ^0.4",
-    "symfony/serializer": "^3.4 || ^4.0",
-    "symfony/framework-bundle": "^3.4 || ^4.0"
+    "eleven-labs/api-service": "^0.4",
+    "symfony/serializer": "^4.0 || ^5.0",
+    "symfony/framework-bundle": "^4.0 || ^5.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.4 || ^7.4",

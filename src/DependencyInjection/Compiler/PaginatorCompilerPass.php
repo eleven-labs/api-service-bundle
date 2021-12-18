@@ -1,22 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ElevenLabs\ApiServiceBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-
 /**
  * Class PaginatorCompilerPass.
  */
 class PaginatorCompilerPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     *
-     * @throws \Exception
-     */
     public function process(ContainerBuilder $container)
     {
         $providers = [];

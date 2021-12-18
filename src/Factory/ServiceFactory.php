@@ -21,34 +21,21 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class ServiceFactory
 {
-    /** @var UriFactory */
-    private $uriFactory;
+    private UriFactory $uriFactory;
+    private UriTemplate $uriTemplate;
+    private MessageFactory $messageFactory;
+    private Validator $validator;
+    private SerializerInterface $serializer;
+    private DecoderInterface $decoder;
 
-    /** @var UriTemplate */
-    private $uriTemplate;
-
-    /** @var MessageFactory */
-    private $messageFactory;
-
-    /** @var Validator */
-    private $validator;
-
-    /** @var SerializerInterface */
-    private $serializer;
-
-    /** @var \ElevenLabs\Api\Decoder\DecoderInterface */
-    private $decoder;
-
-    /**
-     * @param UriFactory          $uriFactory
-     * @param UriTemplate         $uriTemplate
-     * @param MessageFactory      $messageFactory
-     * @param Validator           $validator
-     * @param SerializerInterface $serializer
-     * @param DecoderInterface    $decoder
-     */
-    public function __construct(UriFactory $uriFactory, UriTemplate $uriTemplate, MessageFactory $messageFactory, Validator $validator, SerializerInterface $serializer, DecoderInterface $decoder)
-    {
+    public function __construct(
+        UriFactory $uriFactory,
+        UriTemplate $uriTemplate,
+        MessageFactory $messageFactory,
+        Validator $validator,
+        SerializerInterface $serializer,
+        DecoderInterface $decoder
+    ) {
         $this->uriFactory = $uriFactory;
         $this->uriTemplate = $uriTemplate;
         $this->messageFactory = $messageFactory;
@@ -57,16 +44,6 @@ class ServiceFactory
         $this->decoder = $decoder;
     }
 
-    /**
-     * @param HttpClient             $httpClient
-     * @param SchemaFactoryInterface $schemaFactory
-     * @param string                 $schemaFile
-     * @param array                  $config
-     *
-     * @throws \Assert\AssertionFailedException
-     *
-     * @return ApiService
-     */
     public function getService(HttpClient $httpClient, SchemaFactoryInterface $schemaFactory, string $schemaFile, array $config = []): ApiService
     {
         $schema = $schemaFactory->createSchema($schemaFile);

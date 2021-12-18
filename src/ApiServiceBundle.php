@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ElevenLabs\ApiServiceBundle;
 
 use ElevenLabs\ApiServiceBundle\DependencyInjection\Compiler\FormatPass;
@@ -12,9 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class ApiServiceBundle extends Bundle
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);

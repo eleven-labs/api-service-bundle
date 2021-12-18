@@ -20,9 +20,6 @@ use Symfony\Component\Serializer\Encoder\ChainDecoder;
  */
 class ApiServiceExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = $this->getConfiguration($configs, $container);
@@ -39,10 +36,6 @@ class ApiServiceExtension extends Extension
         $this->configureApiServices($container, $config['apis'], $config['cache']);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $paginationProviders
-     */
     private function configureSerializer(ContainerBuilder $container, array $paginationProviders)
     {
         $container->setAlias('api_service.serializer', 'serializer');
@@ -53,11 +46,6 @@ class ApiServiceExtension extends Extension
         }
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $apiServices
-     * @param array            $cache
-     */
     private function configureApiServices(ContainerBuilder $container, array $apiServices, array $cache)
     {
         $serviceFactoryRef = new Reference('api_service.factory');
@@ -91,15 +79,12 @@ class ApiServiceExtension extends Extension
                 ->addArgument(new Reference($arguments['client']))
                 ->addArgument(new Reference($schemaFactoryId))
                 ->addArgument($arguments['schema'])
-                ->addArgument($arguments['config']);
+                ->addArgument($arguments['config'])
+                ->addTag('eleven-labs.api.service')
+            ;
+            if (method_exists($container, 'registerAliasForArgument')) {
+                $container->registerAliasForArgument('api_service.api.'.$name, ApiService::class, $name);
+            }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfiguration(array $config, ContainerBuilder $container)
-    {
-        return new Configuration($container->getParameter('kernel.debug'));
     }
 }

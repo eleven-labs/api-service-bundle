@@ -15,9 +15,6 @@ class ManifestCommand extends Command
 {
     protected static $defaultName = 'api:manifest';
 
-    /**
-     *
-     */
     protected function configure()
     {
         $this
@@ -26,12 +23,6 @@ class ManifestCommand extends Command
         ;
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = $input->getArgument('dir');
