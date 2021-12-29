@@ -1,33 +1,35 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ElevenLabs\ApiServiceBundle\Pagination;
 
 use ElevenLabs\Api\Definition\ResponseDefinition;
-use ElevenLabs\Api\Service\Pagination\PaginationProvider;
+use ElevenLabs\Api\Service\Pagination\Pagination;
+use ElevenLabs\Api\Service\Pagination\Provider\PaginationProviderInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class PaginationProviderChain implements PaginationProvider
+/**
+ * Class PaginationProviderChain.
+ */
+class PaginationProviderChain implements PaginationProviderInterface
 {
     /**
-     * @var PaginationProvider[]
+     * @var PaginationProviderInterface[]
      */
-    private $providers;
+    private array $providers;
+    private ?PaginationProviderInterface $matchedProvider;
 
-    /**
-     * @var PaginationProvider
-     */
-    private $matchedProvider;
-
-    /**
-     * @param PaginationProvider[] $providers
-     */
     public function __construct(array $providers)
     {
+        $this->providers = [];
+        $this->matchedProvider = null;
         foreach ($providers as $provider) {
             $this->addProvider($provider);
         }
     }
 
-    public function getPagination(array &$data, ResponseInterface $response, ResponseDefinition $responseDefinition)
+    public function getPagination(array &$data, ResponseInterface $response, ResponseDefinition $responseDefinition): Pagination
     {
         if ($this->matchedProvider === null) {
             throw new \LogicException('No pagination provider available');
@@ -40,11 +42,12 @@ class PaginationProviderChain implements PaginationProvider
         return $pagination;
     }
 
-    public function supportPagination(array $data, ResponseInterface $response, ResponseDefinition $responseDefinition)
+    public function supportPagination(array $data, ResponseInterface $response, ResponseDefinition $responseDefinition): bool
     {
         foreach ($this->providers as $index => $provider) {
             if ($provider->supportPagination($data, $response, $responseDefinition)) {
                 $this->matchedProvider = $provider;
+
                 return true;
             }
         }
@@ -52,7 +55,7 @@ class PaginationProviderChain implements PaginationProvider
         return false;
     }
 
-    private function addProvider(PaginationProvider $provider)
+    private function addProvider(PaginationProviderInterface $provider)
     {
         $this->providers[] = $provider;
     }

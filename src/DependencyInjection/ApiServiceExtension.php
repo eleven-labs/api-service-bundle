@@ -1,4 +1,5 @@
 <?php
+
 namespace ElevenLabs\ApiServiceBundle\DependencyInjection;
 
 use ElevenLabs\Api\Decoder\Adapter\SymfonyDecoderAdapter;
@@ -14,17 +15,17 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Serializer\Encoder\ChainDecoder;
 
+/**
+ * Class ApiServiceExtension.
+ */
 class ApiServiceExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
         foreach (['client', 'message_factory', 'uri_factory'] as $type) {
@@ -35,42 +36,22 @@ class ApiServiceExtension extends Extension
         $this->configureApiServices($container, $config['apis'], $config['cache']);
     }
 
-    public function configureSerializer(ContainerBuilder $container, array $paginationProviders)
+    private function configureSerializer(ContainerBuilder $container, array $paginationProviders)
     {
         $container->setAlias('api_service.serializer', 'serializer');
         $denormalizer = $container->getDefinition('api_service.denormalizer.resource');
 
         if (!empty($paginationProviders)) {
-            $providers = [];
-
-            foreach ($paginationProviders as $name => $config) {
-                $providerId = 'api_service.pagination_provider.'.$name;
-                $provider = $container->getDefinition($providerId);
-                $provider->replaceArgument(0, $config);
-                $providers[] = new Reference($providerId);
-            }
-
-            $pagination = $container->getDefinition('api_service.pagination_provider.chain');
-            $pagination->replaceArgument(0, $providers);
-
             $denormalizer->replaceArgument(0, new Reference('api_service.pagination_provider.chain'));
-        } else {
-            $denormalizer->replaceArgument(0, null);
         }
     }
 
-    public function configureApiServices(ContainerBuilder $container, array $apiServices, array $cache)
+    private function configureApiServices(ContainerBuilder $container, array $apiServices, array $cache)
     {
         $serviceFactoryRef = new Reference('api_service.factory');
 
         // Register decoder
-        $definition = $container->register('api_service.decoder.symfony', ChainDecoder::class);
-        $definition->setArguments([
-            [
-                new Reference('serializer.encoder.json'),
-                new Reference('serializer.encoder.xml')
-            ]
-        ]);
+        $container->register('api_service.decoder.symfony', ChainDecoder::class);
 
         $definition = $container->register('api_service.decoder', SymfonyDecoderAdapter::class);
         $definition->setArguments([new Reference('api_service.decoder.symfony')]);
@@ -98,15 +79,12 @@ class ApiServiceExtension extends Extension
                 ->addArgument(new Reference($arguments['client']))
                 ->addArgument(new Reference($schemaFactoryId))
                 ->addArgument($arguments['schema'])
-                ->addArgument($arguments['config']);
+                ->addArgument($arguments['config'])
+                ->addTag('eleven-labs.api.service')
+            ;
+            if (method_exists($container, 'registerAliasForArgument')) {
+                $container->registerAliasForArgument('api_service.api.'.$name, ApiService::class, $name);
+            }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfiguration(array $config, ContainerBuilder $container)
-    {
-        return new Configuration($container->getParameter('kernel.debug'));
     }
 }

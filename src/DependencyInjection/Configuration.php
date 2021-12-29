@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ElevenLabs\ApiServiceBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\ArrayNode;
@@ -9,37 +11,14 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
- * This class contains the configuration information for the bundle.
- *
- * This information is solely responsible for how the different configuration
- * sections are normalized, and merged.
+ * Class Configuration.
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * Whether to use the debug mode.
-     *
-     * @see https://github.com/doctrine/DoctrineBundle/blob/v1.5.2/DependencyInjection/Configuration.php#L31-L41
-     *
-     * @var bool
-     */
-    private $debug;
-
-    /**
-     * @param bool $debug
-     */
-    public function __construct($debug)
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $this->debug = (bool) $debug;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder()
-    {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('api_service');
+        $treeBuilder = new TreeBuilder('api_service');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
@@ -61,15 +40,13 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('pagination')
                     ->info('Pagination providers')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->arrayNode('header')
-                            ->children()
-                                ->scalarNode('page')->defaultValue('X-Page')->end()
-                                ->scalarNode('perPage')->defaultValue('X-Per-Page')->end()
-                                ->scalarNode('totalPages')->defaultValue('X-Total-Pages')->end()
-                                ->scalarNode('totalItems')->defaultValue('X-Total-Items')->end()
-                            ->end()
+                    ->useAttributeAsKey('name')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('page')->defaultValue('X-Page')->end()
+                            ->scalarNode('perPage')->defaultValue('X-Per-Page')->end()
+                            ->scalarNode('totalPages')->defaultValue('X-Total-Pages')->end()
+                            ->scalarNode('totalItems')->defaultValue('X-Total-Items')->end()
                         ->end()
                     ->end()
                 ->end()
@@ -92,7 +69,8 @@ class Configuration implements ConfigurationInterface
 
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $treeBuilder;
     }

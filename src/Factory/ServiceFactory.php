@@ -1,8 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ElevenLabs\ApiServiceBundle\Factory;
 
 use ElevenLabs\Api\Decoder\DecoderInterface;
 use ElevenLabs\Api\Factory\SchemaFactory;
+use ElevenLabs\Api\Factory\SchemaFactoryInterface;
 use ElevenLabs\Api\Service\ApiService;
 use ElevenLabs\Api\Validator\MessageValidator;
 use Http\Client\HttpClient;
@@ -17,32 +21,13 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class ServiceFactory
 {
-    /** @var UriFactory */
-    private $uriFactory;
+    private UriFactory $uriFactory;
+    private UriTemplate $uriTemplate;
+    private MessageFactory $messageFactory;
+    private Validator $validator;
+    private SerializerInterface $serializer;
+    private DecoderInterface $decoder;
 
-    /** @var UriTemplate */
-    private $uriTemplate;
-
-    /** @var MessageFactory */
-    private $messageFactory;
-
-    /** @var Validator */
-    private $validator;
-
-    /** @var SerializerInterface */
-    private $serializer;
-
-    /** @var \ElevenLabs\Api\Decoder\DecoderInterface */
-    private $decoder;
-
-    /**
-     * @param UriFactory $uriFactory
-     * @param UriTemplate $uriTemplate
-     * @param MessageFactory $messageFactory
-     * @param Validator $validator
-     * @param SerializerInterface $serializer
-     * @param DecoderInterface $decoder
-     */
     public function __construct(
         UriFactory $uriFactory,
         UriTemplate $uriTemplate,
@@ -59,20 +44,8 @@ class ServiceFactory
         $this->decoder = $decoder;
     }
 
-    /**
-     * @param HttpClient $httpClient
-     * @param SchemaFactory $schemaFactory
-     * @param $schemaFile
-     * @param array $config
-     *
-     * @return ApiService
-     */
-    public function getService(
-        HttpClient $httpClient,
-        SchemaFactory $schemaFactory,
-        $schemaFile,
-        $config = []
-    ) {
+    public function getService(HttpClient $httpClient, SchemaFactoryInterface $schemaFactory, string $schemaFile, array $config = []): ApiService
+    {
         $schema = $schemaFactory->createSchema($schemaFile);
 
         return new ApiService(

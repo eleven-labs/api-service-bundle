@@ -25,13 +25,12 @@ api_service:
   apis:
     foo:
       schema: 'file://%kernel.root_dir%/config/schema/foo.yml'
-      client: httplug.client.mock
     bar:
       schema: 'file://%kernel.root_dir%/config/schema/foo.yml'
-      client: httplug.client.mock
+      client: httplug.client.foo
       config:
         baseUri: https://bar.com
-        validateRequest: true
+        validateRequest: false
         validateResponse: true
         returnResponse: true
 
